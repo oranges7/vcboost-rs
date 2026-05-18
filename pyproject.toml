@@ -10,6 +10,7 @@ requires-python = ">=3.9"
 dependencies = [
     "numpy>=1.26",
 ]
+scripts = { "vcboost-rs" = "vcboostrs.cli:main" }
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
