@@ -1,0 +1,20 @@
+[package]
+name = "vcboostrs"
+version = "0.1.0"
+edition = "2021"
+description = "Rust-accelerated modules for VCboost variant calling pipeline"
+
+[lib]
+name = "vcboostrs"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.24", features = ["extension-module"] }
+numpy = "0.24"
+ndarray = "0.16"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+strip = true

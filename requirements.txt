@@ -1,0 +1,6 @@
+numpy>=1.26
+pysam>=0.21
+pandas>=2.0
+tensorflow==2.8.0
+tensorflow-addons==0.18.0
+vcboostrs>=0.1.0
