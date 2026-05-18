@@ -29,7 +29,25 @@ jobs:
           target: ${{ matrix.target }}
           manylinux: auto
           command: build
-          args: --release --out dist
+          args: --release --out dist --interpreter python${{ matrix.python-version }}
+          before-script-linux: |
+            PY_VER="${{ matrix.python-version }}"
+            PY_VER_SHORT="${PY_VER//./}"
+            if command -v yum &> /dev/null; then
+              yum install -y python${PY_VER}-devel python${PY_VER}-pip || true
+            fi
+            if command -v apt-get &> /dev/null; then
+              apt-get update && apt-get install -y python${PY_VER}-dev python${PY_VER}-distutils || true
+            fi
+            if [ ! -f /usr/bin/python${PY_VER} ]; then
+              curl -sSL https://www.python.org/ftp/python/${PY_VER}.0/Python-${PY_VER}.0.tgz | tar xz
+              cd Python-${PY_VER}.0
+              ./configure --prefix=/usr --enable-shared || true
+              make -j$(nproc) && make install || true
+              cd ..
+            fi
+            ln -sf /usr/bin/python${PY_VER} /usr/bin/python3 || true
+            python${PY_VER} --version || true
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
